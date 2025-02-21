@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore - QuickTrace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Updated Background Styling */
+html, body {
+    height: 100%; /* Ensures the background covers the entire height of the page */
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', sans-serif;
+    color: #333;
+    overflow-x: hidden;
+}
+
+        /* Header Styling */
+        .navbar {
+            background-color: #2C3E50;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #FFD700 !important;
+        }
+
+        .nav-link {
+            color: #FFFFFF !important;
+        }
+
+        .nav-link:hover {
+            color: #FFD700 !important;
+        }
+
+        /* Background Styling */
+        body::before {
+    content: '';
+    position: fixed; /* Ensures the background stays fixed while scrolling */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, #6a11cb, #2575fc, #ff6a00, #ff3cac);
+    background-size: 400% 400%;
+    z-index: -1; /* Keeps it behind all content */
+    animation: gradientBackground 12s ease infinite;
+}
+
+@keyframes gradientBackground {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+        /* Main Section */
+        .main-section {
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .main-section h1 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            width: 100%;
+            text-decoration: none; /* Ensure the card itself is not underlined */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+
+        .feature-card h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 20px 0 10px;
+            color: #333;
+            text-decoration: none !important; /* Remove underline for text inside */
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: #666;
+            padding: 0 15px 20px;
+            margin: 0;
+            text-decoration: none !important; /* Remove underline for text inside */
+        }
+
+        .feature-card:hover .hover-overlay {
+            opacity: 1;
+        }
+
+        .feature-card a {
+    text-decoration: none; /* Removes underline from links */
+    color: inherit; /* Ensures the text color matches the current theme */
+}
+
+.feature-card a:hover {
+    text-decoration: none; /* Ensures underline does not appear on hover */
+}
+
+
+        .hover-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2C3E50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .card-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+            }
+
+            .main-section h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">QuickTrace</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-primary me-2" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-success me-2" href="login.html">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-info" href="account.html">Account</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <section class="main-section">
+        <h1>Explore QuickTrace Features</h1>
+        <div class="card-container">
+            <!-- Card 1 -->
+            <a href="PRO-INFO.html" class="feature-card">
+                <img src="./assests/product info look up.jpg" alt="Feature 1">
+                <h2>Product (FMCG) Info Check</h2>
+                <p>A short and fast early Info / Description look up of the product. </p>
+            </a>
+            <!-- Card 2 -->
+            <a href="expiry.html" class="feature-card">
+                <img src="./assests/expiry tracking.jpg" alt="Feature 2">
+                <h2>Expiry Tracking of Products</h2>
+                <p>Provide expiry info of a product and track it's expiry with  email notifications.</p>
+            </a>
+            <!-- Card 3 -->
+            <a href="Listexpense.html" class="feature-card">
+                <img src="./assests/expense track.jpg" alt="Feature 3">
+                <h2>Products Expense Trackering</h2>
+                <p>Add products and use advanced analytics for meaningful insights.</p>
+            </a>
+            <!-- Card 4 -->
+            <a href="knowproduct.html" class="feature-card">
+                <img src="./assests/Know product chatbot.jpg" alt="Feature 4">
+                <h2>(BETA FEATURE)<br>Product Knowhow Chatbot</h2>
+                <p>A beta feature chatbot that lets you know in-detail everything about your desired product.</p>
+            </a>
+        </div> 
+
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        &copy; QuickTrace. One Platform for your Product know-how and tracking.
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                alert("You must be logged in!");
+                window.location.href = "login.html"; // Redirect to login if not logged in
+            }
+        });
+    </script>
+
+    <script>
+        function checkSession() {
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                alert("Session expired! Please log in again.");
+                window.location.href = "login.html";
+            }
+        }
+    
+        setInterval(checkSession, 5000); // Check session every 5 seconds
+    </script>
+    
+    <script>
+        document.getElementById("logout-btn").addEventListener("click", async function () {
+            try {
+                await Backendless.UserService.logout();
+                localStorage.removeItem("userId"); // Clear user session
+                sessionStorage.clear(); // Extra security
+                alert("Logged out successfully!");
+                window.location.href = "login.html"; // Redirect to login page
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        });
+    </script>
+    
+    
+</body>
+
+</html>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker - View Expenses</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/backendless/dist/backendless.min.js"></script>
+    <script src="https://cdn.backendless.com/7.0.0/backendless.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(to right, #1e293b, #0f172a);
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #1e40af;
+            color: #f1f5f9;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .back-btn {
+            margin: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: #374151;
+            color: #e2e8f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background-color: #475569;
+        }
+
+        .container {
+            display: flex; /* Create two sections side by side */
+            width: 100%; /* Full width */
+            max-width: 1400px; /* Limit the max width */
+        }
+        
+        .main-content {
+            width: 75%; /* Takes up 75% of the screen */
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+        
+        /* Sidebar Styles */
+.sidebar {
+    background-color: #000000;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 25%; /* 25% of the width */
+    position: relative;
+    height: auto;
+    display: block;
+}
+
+.sidebar h1{
+        margin-bottom: 15px;
+        font-weight: bold;
+}
+
+.sidebar h3 {
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.sidebar .btn {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Make the sidebar always visible */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 100%; /* Full width on small screens */
+    }
+}
+
+@media (min-width: 1024px) {
+    .sidebar {
+        width: 25%; /* 25% width on larger screens */
+        height: 400px;
+        float: right; /* Float the sidebar to the right on desktop */
+    }
+
+    /* Ensures the main content (75% section) is correctly aligned */
+    .main-content {
+        width: 75%;
+        float: left; /* Float the main content to the left */
+    }
+}
+
+        /* Adjust the layout on smaller screens */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column-reverse; /* Stack sections vertically and reverse their order */
+            }
+        
+            .sidebar {
+                display: block; /* Show sidebar on small screens if desired */
+                margin-top: 1rem;
+            }
+            .main-content,
+            .sidebar {
+                width: 100%; /* Take full width */
+            }
+        }
+
+        /*-----------------------------------------------------------------*/
+
+        .search-bar {
+            margin: 1rem auto;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .total-expenses {
+            text-align: center;
+            margin: 1rem;
+            font-size: 1.5rem;
+            color: #93c5fd;
+        }
+
+        .expense-list {
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        .expense-item {
+            background-color: #1f2937;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .expense-category {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* Updated darker shades */
+        .expense-category.groceries {
+            background-color: #166534; /* Dark green */
+        }
+
+        .expense-category.electronics {
+            background-color: #1e40af; /* Dark blue */
+        }
+
+        .expense-category.clothing {
+            background-color: #92400e; /* Dark brown */
+        }
+
+        .expense-category.health {
+            background-color: #7f1d1d; /* Dark red */
+        }
+
+        .expense-category.home {
+            background-color: #334155; /* Dark gray */
+        }
+
+        .expense-category.fuel {
+            background-color: #1e3a8a; /* Navy blue */
+        }
+
+        .expense-category.miscellaneous {
+            background-color: #4b5563; /* Charcoal */
+        }
+
+        .expense-category.others {
+            background-color: #3730a3; /* Indigo */
+        }
+
+        .search-input {
+            background-color: #0f172a;
+            color: #f1f5f9;
+            border: 1px solid #475569;
+            font-weight: bold;
+            padding: 0.75rem;
+            width: 80%;
+        }
+
+        .filters {
+            background-color: #1f2937; /* Dark background */
+            padding: 1rem;
+            margin: 1rem auto;
+            border-radius: 8px;
+            max-width: 800px;
+            display: flex; /* Use flexbox for horizontal layout */
+            justify-content: space-between; /* Spread items evenly */
+            flex-wrap: wrap; /* Allow wrapping for smaller screens */
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column; /* Stack label and input vertically */
+            align-items: center; /* Center-align items */
+            margin: 0.5rem;
+        }
+        
+        .filter-input {
+            background-color: #374151; /* Darker color for filters */
+            color: #ffffff; /* White text */
+            border: 1px solid #475569;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            width: auto;
+            max-width: 200px;
+        }
+        
+        .filter-label {
+            font-size: 1rem;
+            color: #cbd5e1; /* Light gray for labels */
+            margin-bottom: 0.5rem;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Common Header -->
+    <header class="header">
+        <h1>QuickTrace Expense Tracker</h1>
+    </header>
+
+    <!-- Back Button -->
+    <button class="back-btn" onclick="location.href='explore.html'">&larr; Back to Explore</button>
+
+    <div class="container">
+        <section class = "main-content">
+            <!-- Search Bar -->
+            <section class="search-bar">
+                <input type="text" id="search-input" class="search-input" placeholder="Search expenses..." onkeyup="filterExpenses()">
+            </section>
+        
+            <!-- Category Filter -->
+            <section class="filters text-center">
+                <div class="filter-group">
+                <label for="category-filter" class="filter-label">Filter by Category:</label>
+                <select title="category-filter" id="category-filter" class="filter-input" onchange="applyFilters()">
+                    <option value="all">All Categories</option>
+                    <option value="groceries">Groceries</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothing">Clothing</option>
+                    <option value="health">Health</option>
+                    <option value="home">Home</option>
+                    <option value="fuel">Fuel</option>
+                    <option value="miscellaneous">Miscellaneous</option>
+                    <option value="others">Others</option>
+                </select>
+            </div>
+                
+            <div class="filter-group">
+                <label for="start-date" class="filter-label">Filter by Start Date:</label>
+                <input title="filter start date" type="date" id="start-date" class="filter-input" onchange="applyFilters()">
+            </div>
+                
+            <div class="filter-group">
+                <label for="end-date" class="filter-label">Filter by End Date:</label>
+                <input title="filter end date" type="date" id="end-date" class="filter-input" onchange="applyFilters()">
+            </div>
+        
+            <div class="filter-group">
+                <label for="month-filter" class="filter-label">Filter by Month:</label>
+                <input title="filter month" type="month" id="month-filter" class="filter-input" onchange="applyFilters()">
+                </div>
+            </section>
+        
+            <!-- Total Expenses -->
+            <section class="total-expenses">
+                <p id="total-expense-amount"><strong>Total Expenses:</strong> ₹0</p>
+            </section>
+        
+            <!-- Display Expenses List -->
+            <section class="expense-list" id="expense-list">
+                <!-- Expenses will be added dynamically -->
+            </section>
+            </section>
+            <br>
+
+
+        <!-- Sidebar (25% Section) -->
+        <section class="sidebar">
+            <br>
+            <h1 style="justify-self: center;"><strong>Key Options</strong></h1>
+            <br>
+            <button onclick="location.href='Addexpense.html'" class="btn btn-primary mb-2"><strong>Add Expense</strong></button>
+            <button onclick="location.href='ExpenseVisualisations.html'" class="btn btn-primary mb-2"><strong>Expense Report</strong></button>
+            <br>
+            <br>
+            <h3>Additional Details:</h3><br>
+            <div><strong>Total Expense Till Date:</strong> ₹<span id="total-expense-till-date">0</span></div>
+            <br>
+            <div><strong>Total Expense This Year:</strong> ₹<span id="total-expense-this-year">0</span></div>
+            <br>
+            <div><strong>Total Expense This Month:</strong> ₹<span id="total-expense-this-month">0</span></div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', fetchExpenses);
+    
+        // Initialize Backendless with your App ID and API Key
+        Backendless.initApp("E664847D-C023-4EB6-8289-7034F384D158", "BDABE79E-98F7-4BB5-8752-6FD512892706");
+    
+        let allExpenses = [];
+        const userId = localStorage.getItem("userId");  //===============================================================
+
+        function fetchExpenses() {
+            Backendless.Data.of("Expenses").find({
+                where: `userId = '${userId}'`
+            })                                          //==========================================================================0
+                .then(expenses => {
+                    allExpenses = expenses;
+                    displayExpenses(expenses);
+                })
+                .catch(error => {
+                    console.error("Error fetching expenses from Backendless:", error);
+                });
+        }
+    
+        function displayExpenses(expenses) {
+            const expenseList = document.getElementById('expense-list');
+            const totalExpenseElement = document.getElementById('total-expense-amount');
+            expenseList.innerHTML = '';
+            let totalAmount = 0;
+    
+            expenses.forEach(expense => {
+                totalAmount += parseFloat(expense.amount);
+    
+                const expenseItem = document.createElement('div');
+                expenseItem.classList.add('expense-item');
+                expenseItem.innerHTML = `
+                    <div class="expense-details">
+                        <p><strong>Product:</strong> ${expense.productName}</p>
+                        <p><strong>Amount:</strong> ₹${expense.amount}</p>
+                        <p><strong>Date:</strong> ${expense.date}</p>
+                    </div>
+                    <div class="expense-category ${expense.category}">
+                        ${capitalizeFirstLetter(expense.category)}
+                    </div>
+                `;
+                expenseList.appendChild(expenseItem);
+            });
+    
+            totalExpenseElement.textContent = `Total Expenses: ₹${totalAmount.toFixed(2)}`;
+        }
+    
+        function filterExpenses() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            applyFilters({ searchQuery: query });
+        }
+    
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+    
+        function applyFilters({ searchQuery = '', category = '', startDate = '', endDate = '', monthFilter = '' } = {}) {
+            let filteredExpenses = allExpenses;
+    
+            if (searchQuery) {
+                filteredExpenses = filteredExpenses.filter(expense => 
+                    expense.productName.toLowerCase().includes(searchQuery)
+                );
+            }
+    
+            if (category && category !== 'all') {
+                filteredExpenses = filteredExpenses.filter(expense => expense.category === category);
+            }
+    
+            if (startDate) {
+                filteredExpenses = filteredExpenses.filter(expense => new Date(expense.date) >= new Date(startDate));
+            }
+    
+            if (endDate) {
+                filteredExpenses = filteredExpenses.filter(expense => new Date(expense.date) <= new Date(endDate));
+            }
+    
+            if (monthFilter) {
+                const [year, month] = monthFilter.split('-');
+                filteredExpenses = filteredExpenses.filter(expense => {
+                    const date = new Date(expense.date);
+                    return date.getFullYear() === parseInt(year) && date.getMonth() + 1 === parseInt(month);
+                });
+            }
+    
+            displayExpenses(filteredExpenses);
+        }
+    
+        document.getElementById('category-filter').addEventListener('change', (e) => {
+            applyFilters({ category: e.target.value });
+        });
+    
+        document.getElementById('start-date').addEventListener('change', (e) => {
+            applyFilters({ startDate: e.target.value });
+        });
+    
+        document.getElementById('end-date').addEventListener('change', (e) => {
+            applyFilters({ endDate: e.target.value });
+        });
+    
+        document.getElementById('month-filter').addEventListener('change', (e) => {
+            applyFilters({ monthFilter: e.target.value });
+        });
+    
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            filterExpenses();
+        });
+    </script>
+
+
+    <script>
+          // 25% Section Script: Handles Sidebar Logic
+          document.addEventListener('DOMContentLoaded', fetchExpensesSidebar);
+        
+          let allExpensesSidebar = [];
+  
+          //===============================================================================================
+          function fetchExpensesSidebar() {
+            Backendless.Data.of("Expenses").find({
+                where: `userId = '${userId}'`  // Filter by the logged-in user
+            })
+            .then(expenses => {
+                allExpensesSidebar = expenses;
+                calculateTotalExpensesSidebar(expenses);
+            })
+            .catch(error => {
+                console.error("Error fetching expenses from Backendless:", error);
+            });
+        }
+//================================================================================================================================        
+  
+//==============================================================================================================================
+          function calculateTotalExpensesSidebar(expenses) {
+              const currentYear = new Date().getFullYear();
+              const currentMonth = new Date().getMonth() + 1;
+  
+              let totalExpenseTillDate = 0;
+              let totalExpenseThisYear = 0;
+              let totalExpenseThisMonth = 0;
+  
+              expenses.forEach(expense => {
+                  totalExpenseTillDate += parseFloat(expense.amount);
+  
+                  const expenseDate = new Date(expense.date);
+                  if (expenseDate.getFullYear() === currentYear) {
+                      totalExpenseThisYear += parseFloat(expense.amount);
+                      if (expenseDate.getMonth() + 1 === currentMonth) {
+                          totalExpenseThisMonth += parseFloat(expense.amount);
+                      }
+                  }
+              });
+  
+              document.getElementById('total-expense-till-date').textContent = totalExpenseTillDate.toFixed(2);
+              document.getElementById('total-expense-this-year').textContent = totalExpenseThisYear.toFixed(2);
+              document.getElementById('total-expense-this-month').textContent = totalExpenseThisMonth.toFixed(2);
+          }
+    //===================================================================================================================================
+  
+          function filterExpensesSidebar() {
+              const query = document.getElementById('search-input').value.toLowerCase();
+              const filteredExpenses = allExpensesSidebar.filter(expense => expense.productName.toLowerCase().includes(query));
+              calculateTotalExpensesSidebar(filteredExpenses);
+          }
+    </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                alert("You must be logged in!");
+                window.location.href = "login.html"; // Redirect to login if not logged in
+            }
+        });
+    </script>
+    
+    <script>
+        function checkSession() {
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                alert("Session expired! Please log in again.");
+                window.location.href = "login.html";
+            }
+        }
+    
+        setInterval(checkSession, 5000); // Check session every 5 seconds
+    </script>
+    
+
+    
+</body>
+</html>

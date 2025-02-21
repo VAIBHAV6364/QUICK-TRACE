@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Product Expiry - QuickTrace</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+  }
+  </script>
+
+    <style>
+
+        /* Header Styling */
+.navbar {
+    background-color: #2C3E50;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .navbar-brand {
+    font-weight: bold;
+    color: #FFD700 !important;
+  }
+  
+  .nav-link {
+    color: #FFFFFF !important;
+  }
+  
+  .nav-link:hover {
+    color: #FFD700 !important;
+  }
+
+  
+        /* General styling */
+
+        .dark-mode {
+    background-color: #121212;
+    color: #f1f1f1;
+}
+
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .navbar {
+            border-bottom: 3px solid #007BFF;
+        }
+        .back-button {
+            margin: 15px;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            color: #007BFF;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .instructions-box {
+            background-color: rgba(0, 123, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #333;
+        }
+       
+        .form-section {
+            border-left: 2px solid #ddd;
+            padding-left: 20px;
+        }
+        .form-control, .form-select {
+            margin-bottom: 20px; /* Increased spacing */
+        }
+        /* Modal styling */
+        .modal-content {
+            padding: 20px;
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+            .form-section {
+                border-left: none;
+                padding-left: 0;
+                margin-top: 20px;
+            }
+        }
+    </style>
+
+    <style>
+    /* Back button styling */
+    .back-button {
+        position: absolute;
+        top: 20px;
+        left: 10px;
+        text-decoration: none;
+        color: #fff;
+        background-color: #007bff;
+        padding: 8px 12px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .back-button:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    /* Dark/light mode toggle button */
+    .toggle-button {
+        position: absolute;
+        top: 20px;
+        right: 10px;
+        color: #007bff;
+        background-color: #fff;
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        padding: 8px 12px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .toggle-button:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .back-button {
+            position: static;
+            display: block;
+            margin: 10px auto;
+            text-align: center;
+        }
+
+        .toggle-button {
+            position: static;
+            display: block;
+            margin: 10px auto;
+            text-align: center;
+        }
+    }
+</style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">QuickTrace</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Account</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Back button and Toggle button -->
+<div class="d-flex justify-content-between align-items-center" style="position: relative; margin-top: 0px;">
+    <a href="expiry.html" class="back-button" title="Go Back">⟵ Back</a>
+    <button class="toggle-button" onclick="toggleTheme()">Toggle Light/Dark Mode</button>
+  </div>
+
+    <!-- Page Content -->
+    <div class="container">
+        <h1 class="text-primary text-center mb-4">Track Product Expiry</h1>
+
+         <div class="row">
+             <!-- First Section -->
+            <div class="col-lg-6 col-md-12">
+                <h2 class="section-title">Instructions</h2><br><br>
+                <div class="instructions-box">
+                    <ol>
+                        <br><li>Use the form to input details of the product which you need tracking.</li><br>
+                        <li>Provide accurate product details to ensure timely notifications.</li><br>
+                        <li>Specify either manufacture date or the Best Before life to ensure timely tracking.</li><br>
+                        <li>All fields are required so fill all of them.</li><br>
+                        <li>When the confirmation window appraers on the event of click of submit button , read the instruction and then click the relevant option</li><br>
+                        <li>Click "Add and Track Product" to start tracking its expiry.</li><br>
+                    </ol>
+                </div>
+            </div> 
+
+            <!-- Second Section: Expiry Form -->
+            <div class="col-lg-6 col-md-12 form-section">
+                <h2 class="section-title">Add Product to Track</h2>
+                <form id="expiryForm">
+                    <input type="text" class="form-control" placeholder="Product Name" required>
+                    <input type="text" class="form-control" placeholder="Barcode (EAN) Number" required>
+                    <select class="form-select" title="type selection" required>
+                        <option value="" disabled selected>Type of Product</option>
+                        <option value="Food">Food</option>
+                        <option value="Medicine">Medicine</option>
+                        <option value="Cosmetic">Cosmetic</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <label>Manufacture Date (if date not given give 1st of that month)*</label>
+                    <input title="form" type="date" class="form-control" required>
+                    <label>Choose Expiry Tracking Method</label>
+                    <div>
+                        <input type="radio" id="expiryDateOption" name="expiryOption" value="expiryDate" required>
+                        <label for="expiryDateOption">Expiry Date</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="bestBeforeOption" name="expiryOption" value="bestBefore">
+                        <label for="bestBeforeOption">Best Before (Shelf Life)</label>
+                    </div>
+                    <div id="expiryDateInput" class="mt-2" style="display: none;">
+                        <label for="expiryDate">Select Expiry Date</label>
+                        <input type="date" id="expiryDate" class="form-control">
+                        <!-- Placeholder for showing the entered expiry date -->
+                        <p id="expiryDateDisplay" class="mt-2 fw-bold text-primary" style="display: none;">EXPIRY DATE:</p>
+                    </div>
+                    <br>
+                    <div id="bestBeforeInput" class="mt-2" style="display: none;">
+                        <label for="shelfLife">Shelf Life / Best Before (in months)</label>
+                        <input type="number" id="shelfLife" class="form-control" placeholder="e.g., 12">
+                        <!-- Placeholder for showing the calculated expiry date -->
+                        <p id="calculatedExpiryDateDisplay" class="mt-2 fw-bold text-primary" style="display: none;">CALCULATED EXPIRY DATE * :</p>
+                    </div>
+                    
+                    <input type="email" class="form-control" placeholder="Email for Notifications" required>
+                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                        Submit
+                    </button>
+                </form><br><br>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <h5 id="confirmationModalLabel" class="modal-title">Confirmation</h5>
+                <p>By continuing further, you are agreeing to receive notifications for the product's expiry information.</p>
+                <div class="d-flex justify-content-between">
+                    <button id="addTrackButton" type="button" class="btn btn-success">Add and Track Product</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // JavaScript to handle dynamic display of expiry date or shelf life input fields
+        const expiryDateOption = document.getElementById('expiryDateOption');
+        const bestBeforeOption = document.getElementById('bestBeforeOption');
+        const expiryDateInput = document.getElementById('expiryDateInput');
+        const bestBeforeInput = document.getElementById('bestBeforeInput');
+    
+        const expiryDateField = document.getElementById('expiryDate');
+        const expiryDateDisplay = document.getElementById('expiryDateDisplay');
+    
+        const shelfLifeField = document.getElementById('shelfLife');
+        const calculatedExpiryDateDisplay = document.getElementById('calculatedExpiryDateDisplay');
+    
+        // Ensure the initial state is correct when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDisplay();
+        });
+    
+        // Update the display when the radio buttons change
+        expiryDateOption.addEventListener('change', updateDisplay);
+        bestBeforeOption.addEventListener('change', updateDisplay);
+    
+        // Event listener for expiry date field
+        expiryDateField.addEventListener('input', () => {
+            const expiryDate = expiryDateField.value;
+            if (expiryDate) {
+                expiryDateDisplay.style.display = 'block';
+                expiryDateDisplay.textContent = `EXPIRY DATE: ${expiryDate}`;
+            } else {
+                expiryDateDisplay.style.display = 'none';
+            }
+        });
+    
+        // Event listener for shelf life field
+        shelfLifeField.addEventListener('input', () => {
+            const shelfLife = parseInt(shelfLifeField.value, 10);
+            const manufactureDate = document.querySelector('input[type="date"]').value;
+            if (shelfLife && manufactureDate) {
+                const manufactureDateObj = new Date(manufactureDate);
+                const currentDate = new Date();
+                const passedTime = Math.floor((currentDate - manufactureDateObj) / (1000 * 60 * 60 * 24));
+                const leftOutTime = (shelfLife * 30) - passedTime;
+                const calculatedExpiryDate = new Date(currentDate.getTime() + leftOutTime * 24 * 60 * 60 * 1000);
+    
+                calculatedExpiryDateDisplay.style.display = 'block';
+                calculatedExpiryDateDisplay.textContent = `CALCULATED EXPIRY DATE*: ${calculatedExpiryDate.toISOString().split('T')[0]}`;
+            } else {
+                calculatedExpiryDateDisplay.style.display = 'none';
+            }
+        });
+    
+        // Function to update the display of input sections
+        function updateDisplay() {
+            if (expiryDateOption.checked) {
+                expiryDateInput.style.display = 'block';
+                bestBeforeInput.style.display = 'none';
+            } else if (bestBeforeOption.checked) {
+                expiryDateInput.style.display = 'none';
+                bestBeforeInput.style.display = 'block';
+            }
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/backendless"></script>
+
+    <script>
+        // Add this at the beginning of your script, before calling any Backendless methods
+        Backendless.initApp('E664847D-C023-4EB6-8289-7034F384D158', 'BDABE79E-98F7-4BB5-8752-6FD512892706');
+
+
+
+        document.getElementById('addTrackButton').addEventListener('click', async function () {
+            // Gather form data
+            const productName = document.querySelector('input[placeholder="Product Name"]').value;
+            const barcode = document.querySelector('input[placeholder="Barcode (EAN) Number"]').value;
+            const productType = document.querySelector('select').value;
+            const manufactureDate = new Date(document.querySelector('input[type="date"]').value);
+            const expiryDateOption = document.querySelector('input[name="expiryOption"]:checked').value;
+            const email = document.querySelector('input[type="email"]').value;
+        
+            // Calculate expiry date if best before option is selected
+            let expiryDate;
+            if (expiryDateOption === 'expiryDate') {
+                expiryDate = new Date(document.getElementById('expiryDate').value);
+            } else if (expiryDateOption === 'bestBefore') {
+                const shelfLife = parseInt(document.getElementById('shelfLife').value, 10);
+                expiryDate = new Date(manufactureDate.getTime() + shelfLife * 30 * 24 * 60 * 60 * 1000); // Shelf life in months (approx)
+            }
+        
+            const userId = localStorage.getItem("userId");//===========================================================
+            // Prepare the product data
+            const productData = {
+                productName,
+                barcode,
+                productType,
+                manufactureDate,
+                expiryDate,
+                email,
+                userId: userId // Store user ID with expiry product //======================================================
+            };
+        
+            try {
+                // Save product data to Backendless
+                const savedProduct = await Backendless.Data.of("Products").save(productData);
+                alert("Product added successfully! ID: " + savedProduct.objectId);
+                
+                // Close the modal programmatically
+                const modal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
+                modal.hide();
+            
+                // Reload the page after a short delay
+                setTimeout(() => {
+                    location.reload();
+                }, 500); // Delay for 500ms to let the user see the message
+            } catch (error) {
+                console.error("Error adding product:", error);
+                alert("Failed to add product, please try again.");
+            }
+            
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                alert("You must be logged in!");
+                window.location.href = "login.html"; // Redirect to login if not logged in
+            }
+        });
+    </script>
+    
+
+</body>
+</html>

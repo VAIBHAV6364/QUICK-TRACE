@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickTrace - Landing Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Header Styling */
+        .navbar {
+            background-color: #2C3E50;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #FFD700 !important;
+        }
+
+        .nav-link {
+            color: #FFFFFF !important;
+        }
+
+        .nav-link:hover {
+            color: #FFD700 !important;
+        }
+
+        /* Animated Background */
+        .main-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, #2C3E50, #1ABC9C, #16A085, #34495E);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            z-index: -1;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .main-section img {
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+
+        .description {
+            font-size: 1.3rem;
+            margin: 20px auto;
+            max-width: 600px;
+            line-height: 1.8;
+        }
+
+        .btn-explore {
+            background-color: #FFD700;
+            color: #2C3E50;
+            font-weight: bold;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-explore:hover {
+            background-color: #FFC107;
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2C3E50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-section img {
+                max-width: 250px;
+            }
+
+            .description {
+                font-size: 1rem;
+            }
+
+            .btn-explore {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">QuickTrace</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-primary me-2" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-success me-2" href="login.html">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-info" href="account.html">Account</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <section class="main-section">
+        <div class="container">
+            <img src="./assests/QUICK TRACE logo.jpg" alt="QuickTrace Logo" class="img-fluid">
+            <p class="description">
+                Welcome to QuickTrace, your one-stop solution for product tracking and instant information retrieval.
+                Scan, Explore, and Discover effortlessly with our advanced tools tailored to make your life easier!
+            </p>
+            <a href="login.html" class="btn btn-explore">Explore</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        &copy; QuickTrace. One Platform for your Product know-how and tracking.
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById("logout-btn").addEventListener("click", async function () {
+            try {
+                await Backendless.UserService.logout();
+                localStorage.removeItem("userId"); // Clear user session
+                sessionStorage.clear(); // Extra security
+                alert("Logged out successfully!");
+                window.location.href = "login.html"; // Redirect to login page
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        });
+    </script>
+    
+</body>
+
+</html>

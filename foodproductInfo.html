@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature 1 - QuickTrace</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+         /* Header Styling */
+         .navbar {
+            background-color: #2C3E50;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #FFD700 !important;
+        }
+
+        .nav-link {
+            color: #FFFFFF !important;
+        }
+
+        .nav-link:hover {
+            color: #FFD700 !important;
+        }
+        #video-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        #video {
+            width: 100%;
+            height: auto;
+            border: 2px solid #007BFF;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .product-image {
+            max-width: 150px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .ingredient-analysis {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        /* Styling for improved layout */
+        .navbar {
+            border-bottom: 3px solid #007BFF;
+        }
+        .navbar-brand {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .instructions {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .instructions p {
+            font-size: 1rem;
+        }
+        .btn {
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .btn-warning, .btn-info {
+            transition: background-color 0.3s ease;
+        }
+        .btn-warning:hover {
+            background-color: #f39c12;
+        }
+        .btn-info:hover {
+            background-color: #17a2b8;
+        }
+        .product-details {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .product-details h3, .product-details h4 {
+            color: #007BFF;
+        }
+        .product-details p {
+            font-size: 1rem;
+        }
+        .product-details ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .product-details li {
+            padding: 5px 0;
+        }
+        .product-details .text-danger {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        .text-success {
+            color: #28a745;
+        }
+        .d-none {
+            display: none !important;
+        }
+        .container {
+            padding: 0 15px;
+        }
+        .shadow-custom {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        @media (max-width: 767px) {
+            .product-image {
+                max-width: 120px;
+            }
+            .product-details {
+                padding: 15px;
+            }
+        }
+
+
+/* Add hover effect */
+.back-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Responsive sizing for smaller devices */
+@media (max-width: 768px) {
+    .back-button {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-button {
+        font-size: 10px;
+        padding: 4px 8px;
+    }
+}
+
+.dark-mode {
+    background-color: #121212;
+    color: #f1f1f1;
+}
+
+.dark-mode .product-details p {
+    font-size: 1rem;
+    color: #121212;
+}
+.dark-mode .product-details ul {
+    list-style: none;
+    padding-left: 0;
+    color: #121212;
+}
+.dark-mode .product-details li {
+    padding: 5px 0;
+    color: black;
+}
+.dark-mode .product-details .text-danger {
+    font-weight: bold;
+    color: #e74c3c;
+}
+    </style>
+
+    <style>
+        /* Back button styling */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 10px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007bff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+    
+        .back-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+    
+        /* Dark/light mode toggle button */
+        .toggle-button {
+            position: absolute;
+            top: 20px;
+            right: 10px;
+            color: #007bff;
+            background-color: #fff;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, color 0.3s;
+        }
+    
+        .toggle-button:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+    
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .back-button {
+                position: static;
+                display: block;
+                margin: 10px auto;
+                text-align: center;
+            }
+    
+            .toggle-button {
+                position: static;
+                display: block;
+                margin: 10px auto;
+                text-align: center;
+            }
+        }
+    </style>
+    
+
+    <script>
+        function toggleTheme() {
+          document.body.classList.toggle('dark-mode');
+      }
+      </script>
+
+
+</head>
+<body>
+   <!-- Navigation -->
+   <nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="#">QuickTrace</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Account</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <!-- Back button and Toggle button -->
+<div class="d-flex justify-content-between align-items-center" style="position: relative; margin-top: 0px;">
+    <a href="PRO-INFO.html" class="back-button" title="Go Back">⟵ Back</a>
+    <button class="toggle-button" onclick="toggleTheme()">Toggle Light/Dark Mode</button>
+</div>
+
+
+    <!-- Main Content -->
+    <main class="container mt-5 text-center">
+        <h1 class="mb-4 display-4 text-primary fw-bold">FOOD FMCG PRODUCT INFO LOOK-UP</h1>
+
+        <div class="instructions mt-4 p-3 bg-light rounded shadow-custom text-secondary" style="text-align: justify; margin: 0 auto; max-width: 700px;">
+            <p class="mb-2">1. Know that Barcode scanning may not always lead to info retrieval.</p>
+            <p class="mb-2">2. Use manual entry method in-case scanning of a particular barcode fails consecutively.</p>
+            <p class="mb-2">3. Remember not all products maybe available for check up.</p>
+            <p class="mb-2">4. Ensure proper lighting for accurate scanning.</p>
+            <p class="mb-2">5. Hold the device steady for a few seconds.</p>
+            <p class="mb-2">6. Make sure the barcode is clearly visible.</p>
+            <p class="mb-2">7. Incase of barcode scanning make sure to see if the code matches with the displayed code.</p>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-center mt-4">
+            <button id="scanBtn" class="btn btn-lg btn-warning fw-bold mx-2 px-5 py-3 shadow-custom">Scan Barcode</button>
+            <button id="manualEntryBtn" class="btn btn-lg btn-info fw-bold mx-2 px-5 py-3 shadow-custom">Manual Entry</button>
+        </div>
+
+        <!-- Manual Entry Form -->
+        <div id="manual-entry-form" class="d-none mt-4">
+            <input type="text" id="manualBarcodeInput" class="form-control shadow-sm w-50 mx-auto" placeholder="Enter Barcode Number">
+            <button id="manualSubmitBtn" class="btn btn-success fw-bold mt-3">Submit</button>
+        </div>
+
+        <!-- Video Stream -->
+        <div id="video-container" class="mt-4 d-none">
+            <video id="video" class="w-100 border border-primary rounded"></video>
+            <div id="video-container" style="display:none;"></div>
+        </div>
+
+
+        <!-- Scanned Barcode Display -->
+        <div id="barcode-display" class="d-none mt-5">
+            <h4 class="text-success">Scanned/Entered Barcode</h4>
+            <p id="barcode-number" class="text-secondary fw-bold"></p>
+        </div>
+
+        <!-- Product Details -->
+        <div id="loading-screen" class="d-none">
+            <p>Loading product details...</p>
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div> 
+        <div id="product-details" class="mt-5 d-none product-details shadow-custom"></div>
+    </main>
+
+    <!-- Modal for Warning -->
+    <div id="warningModal" class="modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title fw-bold">Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-secondary">
+                    <p>Barcode scanning may not always be accurate. Please evaluate the results before relying on them. 😉</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="continueBtn" class="btn btn-success">Continue</button>
+                    <button class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const scanBtn = document.getElementById("scanBtn");
+        const manualEntryBtn = document.getElementById("manualEntryBtn");
+        const manualEntryForm = document.getElementById("manual-entry-form");
+        const manualBarcodeInput = document.getElementById("manualBarcodeInput");
+        const manualSubmitBtn = document.getElementById("manualSubmitBtn");
+
+        const warningModal = new bootstrap.Modal(document.getElementById("warningModal"));
+        const continueBtn = document.getElementById("continueBtn");
+
+        const videoContainer = document.getElementById('video-container');
+        const video = document.getElementById('video');
+        const barcodeDisplay = document.getElementById('barcode-display');
+        const barcodeNumber = document.getElementById('barcode-number');
+        const productDetails = document.getElementById('product-details');
+        let scannerActive = false;
+
+        // Handle "Scan Barcode" button click
+        scanBtn.addEventListener("click", () => {
+            warningModal.show();
+        });
+
+        // Handle "Continue" button click
+        continueBtn.addEventListener("click", () => {
+            warningModal.hide();
+            if (!scannerActive) {
+                startCamera();
+                initQuagga();
+                scannerActive = true;
+            }
+        });
+
+        // Handle "Manual Entry" button click
+        manualEntryBtn.addEventListener("click", () => {
+            manualEntryForm.classList.toggle("d-none");
+        });
+
+        // Handle manual barcode submission
+        manualSubmitBtn.addEventListener("click", () => {
+            const manualBarcode = manualBarcodeInput.value.trim();
+            if (manualBarcode) {
+                displayProductInfo(manualBarcode);
+                manualBarcodeInput.value = "";
+                manualEntryForm.classList.add("d-none");
+            } else {
+                alert("Please enter a valid barcode number.");
+            }
+        });
+
+        // Function to initialize the camera
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: "environment"
+                    }
+                });
+                video.srcObject = stream;
+                video.play();
+                videoContainer.classList.remove('d-none');
+            } catch (error) {
+                alert("Unable to access the camera. Please check permissions.");
+                console.error(error);
+            }
+        }
+
+        // Function to stop the camera
+        function stopCamera() {
+            const stream = video.srcObject;
+            if (stream) {
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+            }
+            video.srcObject = null;
+        }
+
+        // Initialize Quagga for barcode scanning
+        function initQuagga() {
+            Quagga.init({
+                inputStream: {
+                    type: "LiveStream",
+                    target: video,
+                    constraints: {
+                        facingMode: "environment"
+                    }
+                },
+                decoder: {
+                    readers: ["code_128_reader", "ean_reader", "ean_8_reader"]
+                }
+            }, function(err) {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                Quagga.start();
+            });
+
+            Quagga.onDetected((result) => {
+                if (result && result.codeResult) {
+                    const barcode = result.codeResult.code;
+                    Quagga.stop();
+                    stopCamera();
+                    scannerActive = false;
+                    videoContainer.classList.add('d-none');
+                    displayProductInfo(barcode);
+                }
+            });
+        }
+
+        // Display product information
+function displayProductInfo(barcode) {
+    barcodeNumber.textContent = barcode;
+    barcodeDisplay.classList.remove('d-none');
+
+    const loadingScreen = document.getElementById('loading-screen');
+    productDetails.classList.add('d-none');
+    loadingScreen.classList.remove('d-none'); // Show loading screen
+
+    // Hide the loading screen after 3 seconds and fetch product details
+    setTimeout(() => {
+        loadingScreen.classList.add('d-none'); // Hide loading screen
+
+        // Fetch product details from Open Food Facts
+        fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`)
+            .then(response => response.json())
+            .then(data => {
+                const product = data.product;
+                if (product) {
+                    productDetails.innerHTML = `
+                        <h3 class="text-success fw-bold">Product Details</h3>
+                        <img src="${product.image_url || ''}" alt="Product Image" class="product-image">
+                        <p><strong>Name:</strong> ${product.product_name || "N/A"}</p>
+                        <p><strong>Barcode:</strong> ${product.code || "N/A"}</p>
+                        <p><strong>Brand:</strong> ${product.brands || "N/A"}</p>
+                        <p><strong>Categories:</strong> ${product.categories || "N/A"}</p>
+                        <p><strong>Carbon Footprint:</strong> ${product.carbon_footprint || "N/A"}</p>
+                        <h4>Ingredient Analysis</h4>
+                        <p class="ingredient-analysis">${product.ingredients_text || "N/A"}</p>
+                        <p><strong>Packaging:</strong> ${product.packaging || "N/A"}</p>
+                        <p><strong>Quantity:</strong> ${product.quantity || "N/A"}</p>
+                        <p><strong>Countries:</strong> ${product.countries || "N/A"}</p>
+                        <p><strong>Nutri-Score:</strong> ${product.nutrition_grades || "N/A"}</p>
+                        <p><strong>Eco-Score:</strong> ${product.eco_score || "N/A"}</p>
+                        <p><strong>Food Processing:</strong> ${product.foods_processing || "N/A"}</p>
+                        <h4>Nutritional Values (per 100g/ml):</h4>
+                        <ul>
+                            <li><strong>Energy:</strong> ${product.nutriments ? product.nutriments.energy : "N/A"} kJ</li>
+                            <li><strong>Fat:</strong> ${product.nutriments ? product.nutriments.fat : "N/A"} g</li>
+                            <li><strong>Saturated Fat:</strong> ${product.nutriments ? product.nutriments.saturatedFat : "N/A"} g</li>
+                            <li><strong>Carbohydrates:</strong> ${product.nutriments ? product.nutriments.carbohydrates : "N/A"} g</li>
+                            <li><strong>Sugars:</strong> ${product.nutriments ? product.nutriments.sugars : "N/A"} g</li>
+                            <li><strong>Proteins:</strong> ${product.nutriments ? product.nutriments.proteins : "N/A"} g</li>
+                            <li><strong>Salt:</strong> ${product.nutriments ? product.nutriments.salt : "N/A"} g</li>
+                        </ul>
+                    `;
+                    productDetails.classList.remove('d-none');
+                } else {
+                    productDetails.innerHTML = "<p class='text-danger fw-bold'>Product not found in database.</p>";
+                    productDetails.classList.remove('d-none');
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching product data:", error);
+                productDetails.innerHTML = "<p class='text-danger fw-bold'>Error fetching product details. Please try again later.</p>";
+                productDetails.classList.remove('d-none');
+            });
+    }, 3000); // Wait 3 seconds before fetching data
+}
+    </script>
+
+<script>
+        // Function to check if the page is in mobile view
+        function isMobileView() {
+            return window.matchMedia("(max-width: 768px)").matches;
+        }
+    
+        // Function to handle the scan button click
+        document.getElementById('scanBtn').addEventListener('click', () => {
+            // Detect if the device is mobile
+            const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+            // Ensure the video container only opens in mobile view
+            if (isMobileDevice || isMobileView()) {
+                const constraints = {
+                    video: {
+                        facingMode: 'environment', // Use 'environment' for the rear camera
+                    }
+                };
+    
+                // Access the camera
+                navigator.mediaDevices.getUserMedia(constraints)
+                    .then(stream => {
+                        const videoElement = document.createElement('video');
+                        videoElement.id = 'video';
+                        videoElement.srcObject = stream;
+                        videoElement.autoplay = true;
+    
+                        // Add video element to the DOM
+                        const container = document.getElementById('video-container') || document.createElement('div');
+                        container.id = 'video-container';
+                        container.innerHTML = ''; // Clear existing content
+                        container.appendChild(videoElement);
+                        document.body.appendChild(container);
+    
+                        // Style the video container
+                        container.style.position = 'fixed';
+                        container.style.top = '0';
+                        container.style.left = '0';
+                        container.style.width = '100%';
+                        container.style.height = '100%';
+                        container.style.zIndex = '9999';
+                        container.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                        container.style.display = 'flex';
+                        container.style.justifyContent = 'center';
+                        container.style.alignItems = 'center';
+    
+                        // Close the video stream
+                        container.addEventListener('click', () => {
+                            stream.getTracks().forEach(track => track.stop());
+                            container.remove();
+                        });
+                    })
+                    .catch(err => {
+                        alert('Error accessing the camera: ' + err.message);
+                    });
+            } else {
+                // Display a message or handle the desktop scenario
+                console.log("Desktop view detected. Camera will not be accessed.");
+            }
+        });
+    </script>
+
+    <script>
+        function checkSession() {
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                alert("Session expired! Please log in again.");
+                window.location.href = "login.html";
+            }
+        }
+    
+        setInterval(checkSession, 5000); // Check session every 5 seconds
+    </script>
+    
+    
+</body>
+</html>

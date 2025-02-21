@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tracked Products</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+  }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <style>
+/* Header Styling */
+.navbar {
+  background-color: #2C3E50;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-brand {
+  font-weight: bold;
+  color: #FFD700 !important;
+}
+
+.nav-link {
+  color: #FFFFFF !important;
+}
+
+.nav-link:hover {
+  color: #FFD700 !important;
+}
+
+    
+    .dark-mode {
+      background-color: #121212;
+      color: #f1f1f1;
+  }
+  
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+
+    /* Loading animation overlay */
+    #loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    #loading-overlay .spinner-border {
+      width: 3rem;
+      height: 3rem;
+    }
+
+
+    .main-container {
+      margin-top: 20px;
+    }
+
+    .filter-section {
+      margin-bottom: 20px;
+    }
+
+    .product-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .expiry-status.expired {
+      color: red;
+      font-weight: bold;
+    }
+
+    .expiry-status.soon {
+      color: orange;
+      font-weight: bold;
+    }
+
+    .expiry-status.safe {
+      color: green;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .product-card {
+        flex-direction: column;
+      }
+    }
+  </style>
+
+  <style>
+    /* Back button styling */
+    .back-button {
+        position: absolute;
+        top: 20px;
+        left: 10px;
+        text-decoration: none;
+        color: #fff;
+        background-color: #007bff;
+        padding: 8px 12px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .back-button:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    /* Dark/light mode toggle button */
+    .toggle-button {
+        position: absolute;
+        top: 20px;
+        right: 10px;
+        color: #007bff;
+        background-color: #fff;
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        padding: 8px 12px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .toggle-button:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .back-button {
+            position: static;
+            display: block;
+            margin: 10px auto;
+            text-align: center;
+        }
+
+        .toggle-button {
+            position: static;
+            display: block;
+            margin: 10px auto;
+            text-align: center;
+        }
+    }
+</style>
+
+</head>
+<body>
+
+  <!-- Loading Animation -->
+  <div id="loading-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+       <!-- Navigation -->
+       <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">QuickTrace</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-primary me-2" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-success me-2" href="login.html">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-info" href="account.html">Account</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+<!-- Back button and Toggle button -->
+<div class="d-flex justify-content-between align-items-center" style="position: relative; margin-top: 0px;">
+  <a href="explore.html" class="back-button" title="Go Back">⟵ Back</a>
+  <button class="toggle-button" onclick="toggleTheme()">Toggle Light/Dark Mode</button>
+</div>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    <!-- Filter/Search Section -->
+
+    <div class="container mt-5">
+      <h1 class="text-center text-primary fw-bold mb-4">Expiry Tracker</h1>
+
+
+     <!-- Add Button -->
+<div class="text-center">
+  <a href="expiryIntake.html" class="btn btn-lg btn-primary fw-bold">
+      <i class="bi bi-plus-circle me-2"></i>Add Product
+  </a>
+</div>
+<br>
+
+    <div class="filter-section">
+      <input type="text" class="form-control mb-2" id="search-input" placeholder="Search by product name">
+      <select class="form-select" id="expiry-filter" title="selection">
+        <option value="">Filter by expiry status</option>
+        <option value="safe">Safe</option>
+        <option value="soon">Expiring Soon</option>
+        <option value="expired">Expired</option>
+      </select>
+    </div>
+
+    <!-- Products List -->
+    <div id="products-list">
+      <!-- Example Product Card -->
+      
+    </div>
+  </div>
+
+  <!-- Modal for Editing Product -->
+<!-- Edit Product Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="editProductName" class="form-label">Product Name</label>
+            <input type="text" class="form-control" id="editProductName" />
+          </div>
+          <div class="mb-3">
+            <label for="editBarcode" class="form-label">Barcode</label>
+            <input type="text" class="form-control" id="editBarcode" />
+          </div>
+          <div class="mb-3">
+            <label for="editType" class="form-label">Type</label>
+            <input type="text" class="form-control" id="editType" />
+          </div>
+          <div class="mb-3">
+            <label for="editManufactureDate" class="form-label">Manufacture Date</label>
+            <input type="date" class="form-control" id="editManufactureDate" />
+          </div>
+          <div class="mb-3">
+            <label for="editExpiryDate" class="form-label">Expiry Date</label>
+            <input type="date" class="form-control" id="editExpiryDate" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="saveChangesButton">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // Loading overlay logic
+  window.addEventListener("load", function() {
+    setTimeout(() => {
+      document.getElementById("loading-overlay").style.display = "none";
+    }, 2000); // 3 seconds
+  });
+
+  // Rest of your existing JavaScript code
+  fetchProducts();
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+  <script>
+    // Function to edit product
+    function editProduct(button) {
+      const productCard = button.closest('.product-card');
+      const productName = productCard.querySelector('.product-name').textContent.replace('Product Name: ', '');
+      const barcode = productCard.querySelector('p').textContent.replace('Barcode: ', '');
+      const type = productCard.querySelectorAll('p')[1].textContent.replace('Type: ', '');
+      const manufactureDate = productCard.querySelectorAll('p')[2].textContent.replace('Manufacture Date: ', '');
+      const expiryDate = productCard.querySelectorAll('p')[3].textContent.replace('Expiry Date: ', '');
+      const status = productCard.querySelector('.expiry-status').textContent.replace('Status: ', '').toLowerCase();
+
+      // Fill modal form fields with existing data
+      document.getElementById('editProductName').value = productName;
+      document.getElementById('editBarcode').value = barcode;
+      document.getElementById('editType').value = type;
+      document.getElementById('editManufactureDate').value = manufactureDate;
+      document.getElementById('editExpiryDate').value = expiryDate;
+      document.getElementById('editStatus').value = status;
+
+      // Show modal
+      new bootstrap.Modal(document.getElementById('editModal')).show();
+    }
+
+    // Save changes to product details
+    function saveChanges() {
+      const productName = document.getElementById('editProductName').value;
+      const barcode = document.getElementById('editBarcode').value;
+      const type = document.getElementById('editType').value;
+      const manufactureDate = document.getElementById('editManufactureDate').value;
+      const expiryDate = document.getElementById('editExpiryDate').value;
+      const status = document.getElementById('editStatus').value;
+
+      // Logic to update the product details in your system (e.g., updating database, etc.)
+
+      // Close modal
+      bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+    }
+
+    // Function to delete product
+    function deleteProduct(button) {
+      if (confirm('Are you sure you want to delete this product?')) {
+        const productCard = button.closest('.product-card');
+        productCard.remove();
+      }
+    }
+
+    // Filter products by expiry status
+    document.getElementById('expiry-filter').addEventListener('change', function() {
+      const filterValue = this.value;
+      const products = document.querySelectorAll('.product-card');
+      
+      products.forEach(function(product) {
+        const status = product.getAttribute('data-status');
+        if (filterValue === '' || filterValue === status) {
+          product.style.display = 'block';
+        } else {
+          product.style.display = 'none';
+        }
+      });
+    });
+
+    // Search functionality
+    document.getElementById('search-input').addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      const productNames = document.querySelectorAll('.product-card .product-name');
+      
+      productNames.forEach(function(productName) {
+        const productCard = productName.closest('.product-card');
+        const name = productName.textContent.toLowerCase();
+        if (name.includes(query)) {
+          productCard.style.display = 'block';
+        } else {
+          productCard.style.display = 'none';
+        }
+      });
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/backendless@7.0.0"></script>
+
+  <script>
+    Backendless.initApp("E664847D-C023-4EB6-8289-7034F384D158", "BDABE79E-98F7-4BB5-8752-6FD512892706");
+  </script>
+
+<!--------------------------------------------------------------productlist------------------------------------------------------->
+
+<script>
+  // Function to fetch and display products
+  async function fetchProducts() {
+    try {
+      //const products = await Backendless.Data.of("Products").find(); // Adjust table name as needed
+      const userId = localStorage.getItem("userId"); // Get the logged-in user ID
+const products = await Backendless.Data.of("Products").find({
+    where: `userId = '${userId}'`  // Fetch only products of the logged-in user
+});
+
+      const productsList = document.getElementById("products-list");
+
+      // Clear existing products
+      productsList.innerHTML = "";
+
+      // Process each product
+      products.forEach(product => {
+        // Parse manufacture and expiry dates
+        const manufactureDate = new Date(product.manufactureDate).toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric", // Added day for full date
+          year: "numeric",
+        });
+        const expiryDate = new Date(product.expiryDate).toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric", // Added day for full date
+          year: "numeric",
+        });
+
+        // Determine expiry status
+        const currentDate = new Date();
+        const expiryDateObj = new Date(product.expiryDate);
+        let status = "safe";
+        if (expiryDateObj < currentDate) {
+          status = "expired";
+        } else if (expiryDateObj - currentDate <= 7 * 24 * 60 * 60 * 1000) {
+          status = "soon"; // Expiring within a week
+        }
+
+        // Create product card
+        const productCard = `
+          <div class="product-card" data-status="${status}">
+            <h5 class="product-name">Product Name: ${product.productName || "N/A"}</h5>
+            <p>Barcode: ${product.barcode || "N/A"}</p>
+            <p>Type: ${product.type || "N/A"}</p>
+            <p>Manufacture Date: ${manufactureDate}</p>
+            <p>Expiry Date: ${expiryDate}</p>
+            <p class="expiry-status ${status}">Status: ${status.charAt(0).toUpperCase() + status.slice(1)}</p>
+            <button class="btn btn-warning btn-sm" onclick="editProduct('${product.objectId}')">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteProduct('${product.objectId}')">Delete</button>
+          </div>
+        `;
+        productsList.innerHTML += productCard;
+      });
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  }
+
+  // Call fetchProducts on page load
+  fetchProducts();
+</script>
+
+
+<!------------------------------------------------editproduct--------------------------------------------------------------------->
+<script>
+  async function editProduct(productId) {
+    try {
+      // Fetch the product details by ID
+      const product = await Backendless.Data.of("Products").findById(productId);
+
+      // Fill modal form with product data
+      document.getElementById("editProductName").value = product.productName || "";
+      document.getElementById("editBarcode").value = product.barcode || "";
+      document.getElementById("editType").value = product.productType || "";
+      document.getElementById("editManufactureDate").value = product.manufactureDate
+        ? new Date(product.manufactureDate).toISOString().slice(0, 10)
+        : "";
+      document.getElementById("editExpiryDate").value = product.expiryDate
+        ? new Date(product.expiryDate).toISOString().slice(0, 10)
+        : "";
+
+      // Attach save functionality to the save button
+      document.querySelector("#saveChangesButton").onclick = async function () {
+        try {
+          // Update product details
+          product.productName = document.getElementById("editProductName").value;
+          product.barcode = document.getElementById("editBarcode").value;
+          product.productType = document.getElementById("editType").value;
+          product.manufactureDate = new Date(document.getElementById("editManufactureDate").value).toISOString();
+          product.expiryDate = new Date(document.getElementById("editExpiryDate").value).toISOString();
+
+          // Save updated product
+          await Backendless.Data.of("Products").save(product);
+
+          // Refresh the product list
+          fetchProducts();
+
+          // Hide the modal
+          bootstrap.Modal.getInstance(document.getElementById("editModal")).hide();
+        } catch (error) {
+          console.error("Error saving product:", error);
+        }
+      };
+
+      // Show the modal
+      new bootstrap.Modal(document.getElementById("editModal")).show();
+    } catch (error) {
+      console.error("Error fetching product:", error);
+    }
+  }
+</script>
+
+<!----------------------------------------delete function---------------------------------------------------------------------->
+<script>
+  async function deleteProduct(productId) {
+    if (confirm("Are you sure you want to delete this product?")) {
+      try {
+        await Backendless.Data.of("Products").remove({ objectId: productId });
+        fetchAndDisplayProducts(); // Refresh list
+      } catch (error) {
+        console.error("Error deleting product:", error);
+      }
+    }
+  }
+  
+</script>
+<!----------------------------------------filters integration------------------------------------------------------------------>
+<script>
+  document.getElementById("expiry-filter").addEventListener("change", function () {
+    const filterValue = this.value;
+    const products = document.querySelectorAll(".product-card");
+  
+    products.forEach((product) => {
+      const status = product.getAttribute("data-status");
+      product.style.display = filterValue === "" || filterValue === status ? "block" : "none";
+    });
+  });
+  
+  document.getElementById("search-input").addEventListener("input", function () {
+    const query = this.value.toLowerCase();
+    const productNames = document.querySelectorAll(".product-card .product-name");
+  
+    productNames.forEach((productName) => {
+      const productCard = productName.closest(".product-card");
+      const name = productName.textContent.toLowerCase();
+      productCard.style.display = name.includes(query) ? "block" : "none";
+    });
+  });  
+</script>
+
+<script>
+  // Initialize Backendless
+  const backendlessAppId = "E664847D-C023-4EB6-8289-7034F384D158";  // Replace with your Backendless App ID
+  const backendlessApiKey = "BDABE79E-98F7-4BB5-8752-6FD512892706"; // Replace with your Backendless API key
+  Backendless.initApp(backendlessAppId, backendlessApiKey);
+
+  // Fetch product data from Backendless
+  async function fetchProductData() {
+    try {
+      //=====================================================================================================================
+      const userId = localStorage.getItem("userId");
+const products = await Backendless.Data.of("Products").find({
+    where: `userId = '${userId}'`  // Fetch only the logged-in user's products
+});
+//=======================================================================================================================
+      products.forEach(product => {
+        const expiryDate = new Date(product.expiryDate);
+        const currentDate = new Date();
+        const daysRemaining = Math.ceil((expiryDate - currentDate) / (1000 * 60 * 60 * 24));
+
+        // Check if it's time to send a notification (30, 10, 5, 1 day(s) before expiry, and the expiry day)
+        if ([30, 10, 5, 1].includes(daysRemaining) || daysRemaining === 0) {
+          const toEmail = product.email;
+          const subject = `Reminder: ${product.productName} is expiring in ${daysRemaining} day(s)`;
+          const content = `
+            <h3>${daysRemaining > 0 ? "Reminder" : "Alert"}</h3>
+            <p>Hi,<br>Your product <strong>${product.productName}</strong> is ${daysRemaining > 0 ? `expiring in ${daysRemaining} day(s)` : "expired today"}.</p>
+            <p>Expiry Date: ${expiryDate.toDateString()}</p>
+            <p>Please visit the QUICKTRACE website and make sure of it to take necessary actions.</p>
+            <p>.....THANK YOU for using QUICKTRACE......<p>
+              <br><br>
+            <p>Thanking you,<p>
+            <p>Team QUICKTRACE.<p>
+          `;
+          // Send email using Brevo SMTP
+          sendEmail(toEmail, subject, content);
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  }
+
+  // Send email using Brevo SMTP
+  function sendEmail(toEmail, subject, content) {
+    // Debugging: Log the details of the email being sent
+    console.log("Sending email to:", toEmail);  // Log recipient email
+    console.log("Subject:", subject);  // Log the subject of the email
+    console.log("Content:", content);  // Log the email content
+
+    // Email payload structure for Brevo API
+    const emailData = {
+      sender: { name: "QuickTrace Expiry Notifications", email: "project0rp0mail1@gmail.com" },  // Replace with your verified sender email
+      to: [{ email: toEmail }],
+      subject: subject,
+      htmlContent: content
+    };
+
+    // Send the email via Brevo SMTP API using axios
+    axios.post(`https://api.sendinblue.com/v3/smtp/email`, emailData, {
+      headers: {
+        "api-key": "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", // Replace with your Brevo API key
+        "Content-Type": "application/json",
+      }
+    })
+    .then(response => {
+      console.log("Email sent successfully:", response);
+    })
+    .catch(error => {
+      console.error("Error sending email:", error.response ? error.response.data : error);
+    });
+  }
+
+  // Call fetchProductData to start fetching products and sending emails
+  fetchProductData();
+</script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+          alert("You must be logged in!");
+          window.location.href = "login.html"; // Redirect to login if not logged in
+      }
+  });
+</script>
+
+<script>
+  function checkSession() {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+          alert("Session expired! Please log in again.");
+          window.location.href = "login.html";
+      }
+  }
+
+  setInterval(checkSession, 5000); // Check session every 5 seconds
+</script>
+
+<script>
+  document.getElementById("logout-btn").addEventListener("click", async function () {
+      try {
+          await Backendless.UserService.logout();
+          localStorage.removeItem("userId"); // Clear user session
+          sessionStorage.clear(); // Extra security
+          alert("Logged out successfully!");
+          window.location.href = "login.html"; // Redirect to login page
+      } catch (error) {
+          alert("Error: " + error.message);
+      }
+  });
+</script>
+
+
+
+</body>
+</html>

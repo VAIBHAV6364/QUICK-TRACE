@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Know Your Product - QuickTrace</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Russo+One&family=Poppins:wght@100;300;500&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+
+        /* Header Styling */
+.navbar {
+    background-color: #2C3E50;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .navbar-brand {
+    font-weight: bold;
+    color: #FFD700 !important;
+  }
+  
+  .nav-link {
+    color: #FFFFFF !important;
+  }
+  
+  .nav-link:hover {
+    color: #FFD700 !important;
+  }
+
+  .dark-mode {
+    background-color: #121212;
+    color: #f1f1f1;
+}
+
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #121212;
+            color: #e1e1e1;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Russo One', sans-serif;
+            color: #00FF99;
+            text-transform: uppercase;
+        }
+
+        h3 {
+            font-size: 22px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+
+        /* Main Section Styling */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 40px;
+        }
+
+        .instructions {
+            font-size: 18px;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .content-wrapper {
+            background: linear-gradient(45deg, #1C1C1C, #2C3E50);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 15px rgba(0, 255, 153, 0.6);
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            opacity: 0.9;
+        }
+
+        .content-wrapper h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        .content-wrapper p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        /* Cyberpunk Style Button */
+        .open-chatbot-btn {
+            background-color: #FF0077;
+            color: #fff;
+            font-size: 20px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 0, 119, 0.7);
+        }
+
+        .open-chatbot-btn:hover {
+            background-color: #00FF99;
+            box-shadow: 0 4px 20px rgba(0, 255, 153, 0.7);
+            transform: translateY(-2px);
+        }
+
+        /* Neon Border Effect */
+        .neon-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(45deg, rgba(0, 255, 153, 0.5), rgba(255, 0, 119, 0.5));
+            animation: neon-border 1.5s infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes neon-border {
+            0% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: 30px;
+            }
+
+            .open-chatbot-btn {
+                font-size: 18px;
+                padding: 12px 25px;
+            }
+        }
+    </style>
+
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="#">QuickTrace</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Account</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav><br>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="instructions">
+            <br>
+            <h3>Instructions:</h3>
+            <p><strong>* * * THIS IS A BETA FEATURE AND NEEDS IMPROVEMENT ON COMPLETE INTEGRATION * * *</strong></p>
+            <ol>
+                <li>Click the button below to interact with the Product Info Chatbot.</li>
+                <li>You will have to login through your gmail to access this feature.</li>
+                <li>Provide the product name for detailed information about it.</li>
+                <li>The chatbot will assist in identifying your product.</li>
+                <li>Get the expiry and other product details instantly.</li>
+                <li>Enjoy an immersive cyber experience while using the chatbot!</li>
+            </ol>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="neon-border"></div>
+            <h2>Know Your Product</h2>
+            <p>Click the button below to interact with the Product Info Chatbot.</p>
+            <button class="open-chatbot-btn" onclick="openChatbot()">Open Product Info Chatbot</button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function openChatbot() {
+            window.open('https://poe.com/PRODUCT-DEFINE', '_blank', 'fullscreen=yes');
+        }
+    </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                alert("You must be logged in!");
+                window.location.href = "login.html"; // Redirect to login if not logged in
+            }
+        });
+    </script>
+
+    <script>
+        function checkSession() {
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                alert("Session expired! Please log in again.");
+                window.location.href = "login.html";
+            }
+        }
+    
+        setInterval(checkSession, 5000); // Check session every 5 seconds
+    </script>
+    
+    
+    
+</body>
+</html>
