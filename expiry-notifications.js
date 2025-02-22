@@ -63,7 +63,7 @@ async function sendEmail(toEmail, subject, content) {
 
         // Email payload structure for Brevo API
         const emailData = {
-            sender: { name: "QuickTrace Expiry Notifications", email: "project0rp0mail1@gmail.com" },  // Replace with verified sender email
+            sender: { name: "QuickTrace Expiry Notifications", email: "1dt22is169@dsatm.edu.in" },  // Replace with verified sender email
             to: [{ email: toEmail }],
             subject: subject,
             htmlContent: content
