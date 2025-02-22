@@ -44,7 +44,7 @@ async function sendEmail(toEmail, subject, content) {
             htmlContent: content
         }, {
             headers: {
-                "api-key": "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",
+                "api-key": "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",
                 "Content-Type": "application/json",
             }
         });
