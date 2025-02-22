@@ -11,12 +11,19 @@ async function fetchProductData() {
     try {
         console.log("Fetching product data...");
 
+        // ✅ Log the full API response for debugging
         const products = await Backendless.Data.of("Products").find();
+        console.log("Raw Backendless Response:", JSON.stringify(products, null, 2));
+
         console.log(`Total products found: ${products.length}`);
+
+        if (products.length === 0) {
+            console.warn("⚠️ No products found in Backendless. Check database contents.");
+            return; // Exit early if no products exist
+        }
 
         const currentDate = new Date();
 
-        // ✅ Replaced .forEach() with for...of loop
         for (let product of products) {
             const expiryDate = new Date(product.expiryDate);
             const daysRemaining = Math.ceil((expiryDate - currentDate) / (1000 * 60 * 60 * 24));
@@ -37,7 +44,6 @@ async function fetchProductData() {
                     <p>Team QUICKTRACE.</p>
                 `;
 
-                // ✅ Now `await` works correctly inside a `for...of` loop
                 await sendEmail(toEmail, subject, content);
                 console.log(`Email sent to ${toEmail}`);
             }
@@ -46,6 +52,7 @@ async function fetchProductData() {
         console.error("Error fetching products:", error);
     }
 }
+
 
 // ✅ Ensure sendEmail() is async
 async function sendEmail(toEmail, subject, content) {
