@@ -38,7 +38,7 @@ const axios = require("axios");  // Import axios for HTTP requests
   }
 
   // Send email using Brevo SMTP
-  function sendEmail(toEmail, subject, content) {
+  async function sendEmail(toEmail, subject, content) {
     // Debugging: Log the details of the email being sent
     console.log("Sending email to:", toEmail);  // Log recipient email
     console.log("Subject:", subject);  // Log the subject of the email
