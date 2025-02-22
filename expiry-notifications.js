@@ -59,7 +59,7 @@ async function sendEmail(toEmail, subject, content) {
     try {
         console.log("Sending email to:", toEmail);
         
-        const BREVO_API_KEY = process.env.BREVO_API_KEY;  // Fetch API key from GitHub Secrets
+        //const BREVO_API_KEY = process.env.BREVO_API_KEY;  // Fetch API key from GitHub Secrets
 
         // Email payload structure for Brevo API
         const emailData = {
@@ -72,7 +72,7 @@ async function sendEmail(toEmail, subject, content) {
         // Send the email via Brevo SMTP API using axios
         const response = await axios.post(`https://api.sendinblue.com/v3/smtp/email`, emailData, {
             headers: {
-                "api-key": BREVO_API_KEY, // Use GitHub Secrets
+                "api-key": "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", // Replace with your Brevo API key
                 "Content-Type": "application/json",
             }
         });
